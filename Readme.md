@@ -1,6 +1,5 @@
 # Buy now, pay later with TendoPay For Prestashop
 
-# INSTALLATION
 
 ## MINIMUM REQUIREMENTS
 Prestashop 1.6 or greater
