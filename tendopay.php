@@ -141,13 +141,12 @@ class Tendopay extends PaymentModule
 
             if (Shop::isFeatureActive()) {
                 $shops = Shop::getShops();
-                $odStateid = (int) $order_state->id;
 
                 foreach ($shops as $shop) {
-                    Configuration::updateValue('TENDOPAY_OS_PENDING', $odStateid, false, null, (int)$shop['id_shop']);
+                    Configuration::updateValue('TENDOPAY_OS_PENDING', $order_state->id, false, null, (int)$shop['id_shop']);
                 }
             } else {
-                Configuration::updateValue('TENDOPAY_OS_PENDING', $odStateid);
+                Configuration::updateValue('TENDOPAY_OS_PENDING', $order_state->id);
             }
         }
 
@@ -248,9 +247,9 @@ class Tendopay extends PaymentModule
                     ),
                     array(
                         'label' => '<h3 class="modal-title text-info live-mode">'.$this->l($tendolive).'</h3>',
-                        'type' => 'free',
+                        'type' => 'label',
                         'class' => 'live-mode',
-                        'name' => 'FREE',
+                        'name' => $this->prefix.'_live_free',
                         'desc' => '<br><hr>',
                     ),
                     array(
@@ -276,43 +275,11 @@ class Tendopay extends PaymentModule
                         'hidden'=>'',
                     ),
                     array(
-                        'col' => 6,
-                        'type' => 'text',
-                        'label' => $this->l('Auth Url'),
-                        'required' => true,
-                        'desc' => $this->l('Enter an Auth url'),
-                        'name' => $this->prefix.'_LIVE_AUTH_URL',
-                        'label' => $this->l('Auth Url'),
-                        'class' =>'txbx live-mode',
-                        'hidden'=>'',
-                    ),
-                    array(
-                        'col' => 6,
-                        'type' => 'text',
-                        'label' => $this->l('Order Url'),
-                        'required' => true,
-                        'desc' => $this->l('Enter an Order url'),
-                        'name' => $this->prefix.'_LIVE_ORDER_URL',
-                        'label' => $this->l('Order Url'),
-                        'class' =>'txbx live-mode',
-                        'hidden'=>'',
-                    ),
-                    array(
                         'label' => '<h3 class="modal-title text-info">'.$this->l('Tendopay Sandbox Credential').'</h3>',
-                        'type' => 'free',
+                        'type' => 'label',
                         'class' => 'sandbox-mode',
-                        'name' => 'FREE',
+                        'name' => $this->prefix.'FREE',
                         'desc' => '<br><hr>',
-                    ),
-                    array(
-                        'col' => 6,
-                        'type' => 'text',
-                        'label' => $this->l('Client Secret'),
-                        'required' => true,
-                        'desc' => $this->l('Enter an Client Secret'),
-                        'name' => $this->prefix.'_SANDBOX_CLIENT_SECRET',
-                        'label' => $this->l('Client Secret'),
-                        'class' =>'txbx sandbox-mode',
                         'hidden'=>'',
                     ),
                     array(
@@ -329,22 +296,11 @@ class Tendopay extends PaymentModule
                     array(
                         'col' => 6,
                         'type' => 'text',
-                        'label' => $this->l('Auth Url'),
+                        'label' => $this->l('Client Secret'),
                         'required' => true,
-                        'desc' => $this->l('Enter an Auth url'),
-                        'name' => $this->prefix.'_SANDBOX_AUTH_URL',
-                        'label' => $this->l('Auth Url'),
-                        'class' =>'txbx sandbox-mode',
-                        'hidden'=>'',
-                    ),
-                    array(
-                        'col' => 6,
-                        'type' => 'text',
-                        'label' => $this->l('Order Url'),
-                        'required' => true,
-                        'desc' => $this->l('Enter an Order url'),
-                        'name' => $this->prefix.'_SANDBOX_ORDER_URL',
-                        'label' => $this->l('Order Url'),
+                        'desc' => $this->l('Enter an Client Secret'),
+                        'name' => $this->prefix.'_SANDBOX_CLIENT_SECRET',
+                        'label' => $this->l('Client Secret'),
                         'class' =>'txbx sandbox-mode',
                         'hidden'=>'',
                     ),
@@ -358,14 +314,14 @@ class Tendopay extends PaymentModule
 
     private function postValidation()
     {
-        $sandboxAuthurl = 'The "Sandbox Auth Url" field is required.';
-        $sandboxOrderurl = 'The "Sandbox Order Url" field is required.';
+        // $sandboxAuthurl = 'The "Sandbox Auth Url" field is required.';
+        // $sandboxOrderurl = 'The "Sandbox Order Url" field is required.';
         $sandboxClientsecret = 'The "Sandbox Client Secret" field is required.';
         $sandboxClientid= 'The "Sandbox Client Id" field is required.';
         $liveClientsecret = 'The "Live Client Secret" field is required.';
         $liveClientid = 'The "Live Client Id" field is required.';
-        $liveAuthurl = 'The "Live Auth Url" field is required.';
-        $liveOrderurl = 'The "Live Order Url" field is required.';
+        // $liveAuthurl = 'The "Live Auth Url" field is required.';
+        // $liveOrderurl = 'The "Live Order Url" field is required.';
 
         if (Tools::isSubmit('submitDirectopagoModule')) {
             if (Tools::getValue('TENDOPAY_LIVE_MODE')==1) {
@@ -375,12 +331,12 @@ class Tendopay extends PaymentModule
                 if (!Tools::getValue($this->prefix.'_LIVE_CLIENT_ID')) {
                     $this->postErrors[] = $this->trans($liveClientid, array(), 'Modules.Tendopay.Admin');
                 }
-                if (!Tools::getValue($this->prefix.'_LIVE_AUTH_URL')) {
-                    $this->postErrors[] = $this->trans($liveAuthurl, array(), 'Modules.Tendopay.Admin');
-                }
-                if (!Tools::getValue($this->prefix.'_LIVE_ORDER_URL')) {
-                    $this->postErrors[] = $this->trans($liveOrderurl, array(), 'Modules.Tendopay.Admin');
-                }
+                // if (!Tools::getValue($this->prefix.'_LIVE_AUTH_URL')) {
+                //     $this->postErrors[] = $this->trans($liveAuthurl, array(), 'Modules.Tendopay.Admin');
+                // }
+                // if (!Tools::getValue($this->prefix.'_LIVE_ORDER_URL')) {
+                //     $this->postErrors[] = $this->trans($liveOrderurl, array(), 'Modules.Tendopay.Admin');
+                // }
             } else {
                 if (!Tools::getValue($this->prefix.'_SANDBOX_CLIENT_SECRET')) {
                     $this->postErrors[] = $this->trans($sandboxClientsecret, array(), 'Modules.Tendopay.Admin');
@@ -388,12 +344,12 @@ class Tendopay extends PaymentModule
                 if (!Tools::getValue($this->prefix.'_SANDBOX_CLIENT_ID')) {
                     $this->postErrors[] = $this->trans($sandboxClientid, array(), 'Modules.Tendopay.Admin');
                 }
-                if (!Tools::getValue($this->prefix.'_SANDBOX_AUTH_URL')) {
-                    $this->postErrors[] = $this->trans($sandboxAuthurl, array(), 'Modules.Tendopay.Admin');
-                }
-                if (!Tools::getValue($this->prefix.'_SANDBOX_ORDER_URL')) {
-                    $this->postErrors[] = $this->trans($sandboxOrderurl, array(), 'Modules.Tendopay.Admin');
-                }
+                // if (!Tools::getValue($this->prefix.'_SANDBOX_AUTH_URL')) {
+                //     $this->postErrors[] = $this->trans($sandboxAuthurl, array(), 'Modules.Tendopay.Admin');
+                // }
+                // if (!Tools::getValue($this->prefix.'_SANDBOX_ORDER_URL')) {
+                //     $this->postErrors[] = $this->trans($sandboxOrderurl, array(), 'Modules.Tendopay.Admin');
+                // }
             }
         }
     }
@@ -420,12 +376,12 @@ class Tendopay extends PaymentModule
             $this->prefix.'_LIVE_MODE' => Configuration::get($this->prefix.'_LIVE_MODE'),
             $this->prefix.'_LIVE_CLIENT_SECRET' => Configuration::get($this->prefix.'_LIVE_CLIENT_SECRET'),
             $this->prefix.'_LIVE_CLIENT_ID' => Configuration::get($this->prefix.'_LIVE_CLIENT_ID'),
-            $this->prefix.'_LIVE_AUTH_URL' => Configuration::get($this->prefix.'_LIVE_AUTH_URL'),
-            $this->prefix.'_LIVE_ORDER_URL' => Configuration::get($this->prefix.'_LIVE_ORDER_URL'),
+            $this->prefix.'_LIVE_AUTH_URL' => Configuration::set($this->prefix.'_LIVE_AUTH_URL', 'https://app.tendopay.ph/oauth/token'),
+            $this->prefix.'_LIVE_ORDER_URL' => Configuration::get($this->prefix.'_LIVE_ORDER_URL', 'https://app.tendopay.ph/payments/api/v2/order'),
             $this->prefix.'_SANDBOX_CLIENT_SECRET' => Configuration::get($this->prefix.'_SANDBOX_CLIENT_SECRET'),
             $this->prefix.'_SANDBOX_CLIENT_ID' => Configuration::get($this->prefix.'_SANDBOX_CLIENT_ID'),
-            $this->prefix.'_SANDBOX_AUTH_URL' => Configuration::get($this->prefix.'_SANDBOX_AUTH_URL'),
-            $this->prefix.'_SANDBOX_ORDER_URL' => Configuration::get($this->prefix.'_SANDBOX_ORDER_URL'),
+            $this->prefix.'_SANDBOX_AUTH_URL' => Configuration::set($this->prefix.'_SANDBOX_AUTH_URL', 'https://sandbox.tendopay.ph/oauth/token'),
+            $this->prefix.'_SANDBOX_ORDER_URL' => Configuration::set($this->prefix.'_SANDBOX_ORDER_URL', 'https://sandbox.tendopay.ph/payments/api/v2/order'),
         );
     }
 
@@ -472,14 +428,14 @@ class Tendopay extends PaymentModule
         if ($this->active == false) {
             return;
         }
-        
+
 
         $order = $params['objOrder'];
 
         if ($order->getCurrentOrderState()->id != Configuration::get('PS_OS_ERROR')) {
             $this->smarty->assign('status', 'ok');
         }
-        
+
 
         $this->smarty->assign(array(
             'id_order' => $order->id,

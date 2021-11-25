@@ -26,9 +26,9 @@
 <div>
 	<h3>{l s='An error occurred' mod='tendopay'}:</h3>
 	<ul class="alert alert-danger">
-        <li>{l s='Error while doing payment' mod='tendopay'}.</li>
+        <li>{l s='We encountered an issue while processing your payment :(' mod='tendopay'}.</li>
 		{if $tendopay_error_msg neq ''}
-			<li>{l s='Error is' mod='tendopay'}: {$tendopay_error_msg|escape:'html':'UTF-8'}</li>
+			<li>{l s='Error: ' mod='tendopay'}: {$tendopay_error_msg|escape:'html':'UTF-8'}</li>
 		{/if}
 	</ul>
 </div>

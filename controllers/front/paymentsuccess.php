@@ -25,7 +25,6 @@
 
 class TendopayPaymentSuccessModuleFrontController extends ModuleFrontController
 {
-
     public function init()
     {
         parent::init();
@@ -46,7 +45,7 @@ class TendopayPaymentSuccessModuleFrontController extends ModuleFrontController
             // Update Transaction Id
             Db::getInstance()->update('order_payment', array(
                 'transaction_id' => Tools::getValue('tp_transaction_id'),
-            ), 'order_reference = ');
+            ), 'order_reference = ' . "'" . (string)$order->reference . "'");
 
             $secure_key = Context::getContext()->customer->secure_key;
             // Redirect to order confirmation page
@@ -62,24 +61,24 @@ class TendopayPaymentSuccessModuleFrontController extends ModuleFrontController
                 $cart_id = $order_payment_error->id_cart;
                 $cart= new Cart((int)$cart_id);
                 $products= $cart->getProducts(true);
-                 //echo 'cart<pre>'; print_r($products); exit;
+                //echo 'cart<pre>'; print_r($products); exit;
 
                 if (!empty($products)) {
                     $this->context->cart->add();
                     foreach ($products as $key => $line) {
                         $this->context->cart->updateQty((int)$line['cart_quantity'], $line['id_product'], $line['id_product_attribute'], false);
                     }
-                        $this->context->cookie->id_cart = $this->context->cart->id;
-                        $this->context->cookie->write();
+                    $this->context->cookie->id_cart = $this->context->cart->id;
+                    $this->context->cookie->write();
                 }
             }
-            
+
 
             $order_payment_error->setCurrentState((int)Configuration::get('PS_OS_ERROR'));
             // Update Order status to (Canceled)
             $order_canceled = new Order((int)Tools::getValue('tp_merchant_order_id'));
             $order_canceled->setCurrentState((int)Configuration::get('PS_OS_CANCELED'));
-                $this->context->smarty->assign('tendopay_error_msg', $tendopay_error);
+            $this->context->smarty->assign('tendopay_error_msg', $tendopay_error);
             if (Tendopay::isPs17()) {
                 $this->setTemplate('module:tendopay/views/templates/front/paymenterror.tpl');
             } else {

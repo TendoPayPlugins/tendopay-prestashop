@@ -66,7 +66,7 @@ class TendopayValidationModuleFrontController extends ModuleFrontController
         $cart_id = $cart->id;
         $customer_id = $cart->id_customer;
         $amount = (float)$cart->getOrderTotal(true, Cart::BOTH);
-        
+
         /*
          * Restore the context from the $cart_id & the $customer_id to process the validation properly.
          */
@@ -76,7 +76,7 @@ class TendopayValidationModuleFrontController extends ModuleFrontController
         if (!Validate::isLoadedObject(Context::getContext()->customer)) {
             Tools::redirect('index.php?controller=order&step=1');
         }
-        
+
         Context::getContext()->currency = new Currency((int) Context::getContext()->cart->id_currency);
         Context::getContext()->language = new Language((int) Context::getContext()->customer->id_lang);
         $secure_key = Context::getContext()->customer->secure_key;
@@ -126,12 +126,6 @@ class TendopayValidationModuleFrontController extends ModuleFrontController
         $customer =new Customer((int) $cart->id_customer);
         $address = new Address($id_delivery_address);
         $amount = (float)$cart->getOrderTotal(true, Cart::BOTH);
-        $id_state =$address->id_state;
-
-        $state = new State((int) $id_state);
-        if (Validate::isLoadedObject($state)) {
-            $state_iso = $state->iso_code;
-        }
 
         $cartid = $cart->id;
         $country_id =$address->id_country;
@@ -155,7 +149,6 @@ class TendopayValidationModuleFrontController extends ModuleFrontController
             "clientEmail" => $customer->email,
             "clientAddress" => $address->address1,
             "clientCity" => $address->city,
-            "clientState" => $state_iso ? $state_iso : 'RJ',
             "clientZipcode" => $address->postcode,
             "clientMobilePhone" => $address->phone,
             "amount" => $amount,
@@ -187,14 +180,14 @@ class TendopayValidationModuleFrontController extends ModuleFrontController
         if (!empty($mode)) {
             $client_secret = Configuration::get('TENDOPAY_LIVE_CLIENT_SECRET');
             $client_id = Configuration::get('TENDOPAY_LIVE_CLIENT_ID');
-            $token_url = Configuration::get('TENDOPAY_LIVE_AUTH_URL');
-            $order_url = Configuration::get('TENDOPAY_LIVE_ORDER_URL');
-            //$payment_authorize_url = Configuration::get('TENDOPAY_LIVE_PAYMENT_AUTHORIZE_URL');
+            $token_url = 'https://app.tendopay.ph/oauth/token';
+            $order_url = 'https://app.tendopay.ph/payments/api/v2/order';
+        //$payment_authorize_url = Configuration::get('TENDOPAY_LIVE_PAYMENT_AUTHORIZE_URL');
         } else {
             $client_secret = Configuration::get('TENDOPAY_SANDBOX_CLIENT_SECRET');
             $client_id = Configuration::get('TENDOPAY_SANDBOX_CLIENT_ID');
-            $token_url = Configuration::get('TENDOPAY_SANDBOX_AUTH_URL');
-            $order_url = Configuration::get('TENDOPAY_SANDBOX_ORDER_URL');
+            $token_url = 'https://sandbox.tendopay.ph/oauth/token';
+            $order_url = 'https://sandbox.tendopay.ph/payments/api/v2/order';
             //$payment_authorize_url = Configuration::get('TENDOPAY_SANDBOX_PAYMENT_AUTHORIZE_URL');
         }
 
@@ -230,6 +223,7 @@ class TendopayValidationModuleFrontController extends ModuleFrontController
                 $cart = $this->context->cart;
                 $customer_id = $cart->id_customer;
                 $amount = (int)$cart->getOrderTotal(true, Cart::BOTH);
+                $order_description = $cart->getLastProduct();
                 //$currency_id = (int) Context::getContext()->currency->id;
                 //$currency = new CurrencyCore($currency_id);
                 $body_hash = array(
@@ -238,7 +232,7 @@ class TendopayValidationModuleFrontController extends ModuleFrontController
                     'tp_merchant_order_id' => ''.$this->module->currentOrder.'',
                     'tp_redirect_url' => $redirect_url,
                     'tp_merchant_user_id' => ''.$customer_id.'',
-                    'tp_description' => 'Test order',
+                    'tp_description' => $order_description['name'],
                 );
 
                 ksort($body_hash);
@@ -252,7 +246,7 @@ class TendopayValidationModuleFrontController extends ModuleFrontController
                     'tp_merchant_order_id' => ''.$this->module->currentOrder.'',
                     'tp_redirect_url' => $redirect_url,
                     'tp_merchant_user_id' => ''.$customer_id.'',
-                    'tp_description' => 'Test order',
+                    'tp_description' => $order_description['name'],
                     'access_token' => $accesstoken,
                     'x_signature' =>$hash
                 );
