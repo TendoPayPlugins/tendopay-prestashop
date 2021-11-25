@@ -45,8 +45,8 @@ $(document).ready(function() {
 	   	$('form#module_form .form-wrapper .form-group:nth-child(2)').css('display','none');
 	   	$('form#module_form .form-wrapper .form-group:nth-child(3)').css('display','none');
 	   	$('form#module_form .form-wrapper .form-group:nth-child(4)').css('display','none');
-	   	$('form#module_form .form-wrapper .form-group:nth-child(5)').css('display','none');
-	   	$('form#module_form .form-wrapper .form-group:nth-child(6)').css('display','none');
+	   	// $('form#module_form .form-wrapper .form-group:nth-child(5)').css('display','none');
+	   	// $('form#module_form .form-wrapper .form-group:nth-child(6)').css('display','none');
 
 	   }
 
@@ -68,8 +68,8 @@ $(document).ready(function() {
 	   	$('form#module_form .form-wrapper .form-group:nth-child(2)').css('display','block');
 	   	$('form#module_form .form-wrapper .form-group:nth-child(3)').css('display','block');
 	   	$('form#module_form .form-wrapper .form-group:nth-child(4)').css('display','block');
-	   	$('form#module_form .form-wrapper .form-group:nth-child(5)').css('display','block');
-	   	$('form#module_form .form-wrapper .form-group:nth-child(6)').css('display','block');
+	   	$('form#module_form .form-wrapper .form-group:nth-child(5)').css('display','none');
+	   	$('form#module_form .form-wrapper .form-group:nth-child(6)').css('display','none');
 
 	   } else if(changemode !='undefined' && changemode ==0) {
 
@@ -77,8 +77,8 @@ $(document).ready(function() {
 	   	$('form#module_form .form-wrapper .form-group:nth-child(2)').css('display','none');
 	   	$('form#module_form .form-wrapper .form-group:nth-child(3)').css('display','none');
 	   	$('form#module_form .form-wrapper .form-group:nth-child(4)').css('display','none');
-	   	$('form#module_form .form-wrapper .form-group:nth-child(5)').css('display','none');
-	   	$('form#module_form .form-wrapper .form-group:nth-child(6)').css('display','none');
+	   	$('form#module_form .form-wrapper .form-group:nth-child(5)').css('display','block');
+	   	$('form#module_form .form-wrapper .form-group:nth-child(6)').css('display','block');
 
 
 	   	//$('form#module_form .form-wrapper .form-group:nth-child(6)').css('display','block');
