@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
-    <name>tendopay</name>
+    <name>TendoPay</name>
     <displayName><![CDATA[Buy now, pay later with TendoPay]]></displayName>
     <version><![CDATA[1.0.0]]></version>
-    <description><![CDATA[Accept local payment methods for LATAM using your Tendopay Merchant account.]]></description>
+    <description><![CDATA[Integrate Philippines leading Buy now, pay later platform with your shop.]]></description>
     <author><![CDATA[TendoPay]]></author>
     <tab><![CDATA[payments_gateways]]></tab>
     <confirmUninstall><![CDATA[Are you sure about removing these details?]]></confirmUninstall>
